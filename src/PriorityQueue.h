@@ -66,19 +66,6 @@ public:
     // Time Efficiency: O(1)
     T& peek() throw (EmptyDataCollectionException);
 
-    friend ostream & operator<< (ostream & os, const PriorityQueue<T>& rhs) {
-        Node<T>* current = rhs.head;
-
-        os << "elementCount = " << rhs.elementCount;
-
-        // Traverse the list
-        while (current != NULL){
-            cout << current -> data; // Print data
-            current = current -> next; // Go to next Node
-        }
-
-        return os;
-    } // end of operator <<
 };
 
 template<class T>
