@@ -20,6 +20,9 @@ bool operator<(const HuffmanTree &a, const HuffmanTree &b) {
 
 HuffmanTree::Node::Node(char val) {
     this->val = val;
+    this->parent = nullptr;
+    this->left = nullptr;
+    this->right = nullptr;
 }
 void HuffmanTree::Node::attachNodes(HuffmanTree::Node *left, HuffmanTree::Node *right) {
     this->left = left;
