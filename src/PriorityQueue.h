@@ -64,7 +64,7 @@ public:
     // Post-condition: This Priority Queue is unchanged.
     // Exceptions: Throws EmptyDataCollectionException if this Priority Queue is empty.
     // Time Efficiency: O(1)
-    T& peek() throw (EmptyDataCollectionException);
+    T& peek();
 
 };
 
@@ -121,7 +121,7 @@ bool PriorityQueue<T>::enqueue(const T &newElement) {
     }
     Node<T>* t = head;
         //get t to either the first element that is the same
-    while(t->next != NULL && t->next->data < newElement)
+    while(t->next != NULL && t->next->data <= newElement)
         t = t->next;
 
     Node<T>* node = new Node<T>(newElement,t->next);
@@ -145,10 +145,10 @@ bool PriorityQueue<T>::dequeue() {
 
 //This is how we throw exceptions
 template<class T>
-T &PriorityQueue<T>::peek() throw (EmptyDataCollectionException){
+T &PriorityQueue<T>::peek(){
 
-    if(isEmpty())   //Checking if the queue is empty
-        throw EmptyDataCollectionException("Queue is empty\n");
+    //if(isEmpty())   //Checking if the queue is empty
+      //  return nullptr;
 
     return head->data;
 }
