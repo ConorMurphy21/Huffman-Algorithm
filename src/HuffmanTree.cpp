@@ -54,7 +54,7 @@ void HuffmanTree::populateHuffCodeTable(std::string *table){
     codeTab(root,s,0,table);
 }
 
-void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::string table[256]) {
+void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::string table[128]) {
     if(root->getVal() != 0){
         std::string code;
         s[n] = 0;

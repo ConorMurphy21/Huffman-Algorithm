@@ -8,30 +8,35 @@
 #include "PriorityQueue.h"
 #include "HuffmanTree.h"
 
+
 using namespace std;
 
-int main(){
+int encode(){
 
-    ifstream in;
+    ifstream in("../../res/Muppets.txt");
 
-
-    in.open("../../res/Muppets.txt");
     if(!in.is_open()){
         cout << "There was an error opening the file" << endl;
         return 0;
     }
 
+    //make frequancy table
     frequencyCounter fq(in);
-
+    in.close();
     PriorityQueue<HuffmanTree> q;
 
+    //turn frequencies into weighted huffman trees, and put in priority queue
+    char numOfChars = 0;
     for(unsigned char c = 0; c < 128; c++){
         unsigned f = fq.getFreqOfChar(c);
         if(f == 0)continue;
         HuffmanTree huff = HuffmanTree(f,c);
         q.enqueue(huff);
+        //count the number of chars that appear for later
+        numOfChars++;
     }
 
+    //add trees together, and place back into queue until the queue is empty
     HuffmanTree daTree = q.peek();
     q.dequeue();
     while(!q.isEmpty()){
@@ -43,12 +48,65 @@ int main(){
         q.dequeue();
     }
 
-    string codeTable[256];
+    //get codeTable from the huffman tree
+    string codeTable[128];
     daTree.populateHuffCodeTable(codeTable);
 
-    for(unsigned char c = 0; c < 128; c++){
-        if(codeTable[c].empty())continue;
-        cout << c << " : " << codeTable[c] << endl;
+    //encoding:
+    //encode the number of characters, all of the characters and then all of their frequencies
+    ofstream out("../../res/Muppets.huff", ios::binary);
+    if(!out.is_open()){
+        cout << "something went wrong when trying to open huff file" << endl;
+        return 1;
     }
 
+    //write the number of chars
+    char* buffer = &numOfChars;
+    out.write(buffer,sizeof(char));
+
+    //write all of the characters that are
+    buffer = new char[numOfChars];
+    int i = 0;
+    for(unsigned char c = 0; c < 128; c++){
+        if(codeTable[c].empty())continue;
+        buffer[i] = c;
+        i++;
+    }
+    out.write(buffer,sizeof(char)*numOfChars);
+
+    unsigned* uiBuffer = new unsigned[numOfChars*4];
+    i=0;
+    for(unsigned char c = 0; c < 128; c++){
+        if(codeTable[c].empty())continue;
+        uiBuffer[i] = fq.getFreqOfChar(c);
+        i++;
+    }
+    out.write((char*)uiBuffer,sizeof(unsigned)*numOfChars);
+
+    out.close();
+    //read file back
+    return 0;
+}
+
+
+int decode(){
+    ifstream in("../../res/Muppets.huff", ios::binary);
+    char num;
+    in.read(&num,sizeof(char));
+
+    char* buffer = new char[num];
+    in.read(buffer,sizeof(char)*num);
+
+    unsigned* freqs = new unsigned[num];
+    in.read((char*)freqs,sizeof(unsigned)*num);
+
+    for(int i = 0; i < num; i++){
+        cout << buffer[i] << " : " << freqs[i] << endl;
+    }
+    return 0;
+}
+
+int main(){
+    encode();
+    decode();
 }

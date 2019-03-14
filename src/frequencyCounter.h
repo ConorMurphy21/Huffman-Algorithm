@@ -8,7 +8,7 @@
 
 class frequencyCounter {
 private:
-     unsigned arr[255] = {0};
+     unsigned arr[128] = {0};
 
 public:
 
