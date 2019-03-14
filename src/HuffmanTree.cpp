@@ -9,9 +9,11 @@
 HuffmanTree::HuffmanTree(unsigned weight, char c) {
     root = new Node(c);
     this->weight = weight;
+    this->height = 0;
 }
 HuffmanTree::HuffmanTree(const HuffmanTree &a, const HuffmanTree &b) {
     this->weight = a.weight + b.weight;
+    this->height = (a.height > b.height) ? a.height:b.height +1;
     this->root = new Node(0);
     this->root->attachNodes(a.root,b.root);
 }
@@ -28,15 +30,12 @@ bool operator<=(const HuffmanTree &a, const HuffmanTree &b) {
 }
 HuffmanTree::Node::Node(char val) {
     this->val = val;
-    this->parent = nullptr;
     this->left = nullptr;
     this->right = nullptr;
 }
 void HuffmanTree::Node::attachNodes(HuffmanTree::Node *left, HuffmanTree::Node *right) {
     this->left = left;
     this->right = right;
-    left->parent = this;
-    right->parent = this;
 }
 
 char HuffmanTree::Node::getVal() {
@@ -49,29 +48,26 @@ HuffmanTree::Node* HuffmanTree::Node::getLeft() {
 HuffmanTree::Node* HuffmanTree::Node::getRight() {
     return right;
 }
-HuffmanTree::Node* HuffmanTree::Node::getParent() {
-    return parent;
-}
-void HuffmanTree::printTable() {
-    char s[100];
-    printTab(root,s,0);
+
+void HuffmanTree::populateHuffCodeTable(std::string *table){
+    char s[height];
+    codeTab(root,s,0,table);
 }
 
-void HuffmanTree::printTab(HuffmanTree::Node* root, char s[100],unsigned n) {
+void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::string table[256]) {
     if(root->getVal() != 0){
-        std::cout << root->getVal() << " : ";
-        for(int i = 0; i < n; i++)printf("%c",s[i]);
-
-        printf("\n");
+        std::string code;
+        s[n] = 0;
+        code = s;
+        table[root->getVal()] = s;
         return;
     }
 
     s[n]= '0';
-    printTab(root->getLeft(),s,n+1);
+    codeTab(root->getLeft(),s,n+1,table);
 
     s[n] = '1';
-    printTab(root->getRight(),s,n+1);
-
+    codeTab(root->getRight(),s,n+1,table);
 
 }
 

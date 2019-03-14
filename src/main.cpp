@@ -43,6 +43,12 @@ int main(){
         q.dequeue();
     }
 
-    daTree.printTable();
+    string codeTable[256];
+    daTree.populateHuffCodeTable(codeTable);
+
+    for(unsigned char c = 0; c < 128; c++){
+        if(codeTable[c].empty())continue;
+        cout << c << " : " << codeTable[c] << endl;
+    }
 
 }

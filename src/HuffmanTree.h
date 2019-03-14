@@ -12,12 +12,12 @@ class HuffmanTree {
 private:
 
     unsigned weight;
+    unsigned height;
 
     class Node{
     private:
         Node* left;
         Node* right;
-        Node* parent;
         char val;
     public:
         Node(char val);
@@ -25,12 +25,11 @@ private:
         char getVal();
         Node* getLeft();
         Node* getRight();
-        Node* getParent();
     };
 
     Node* root;
 
-    void printTab(Node* root, char s[100],unsigned n);
+    void codeTab(Node* root, char *s,unsigned n,std::string str[256]);
 
 public:
 
@@ -40,7 +39,7 @@ public:
 
     HuffmanTree();
 
-    void printTable();
+    void populateHuffCodeTable(std::string *table);
 
     friend bool operator < (const HuffmanTree& a, const HuffmanTree& b);
     friend bool operator <= (const HuffmanTree& a, const HuffmanTree& b);
