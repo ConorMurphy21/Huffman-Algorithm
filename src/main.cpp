@@ -7,6 +7,7 @@
 #include "frequencyCounter.h"
 #include "PriorityQueue.h"
 #include "HuffmanTree.h"
+#include "BitStream.h"
 
 
 using namespace std;
@@ -22,7 +23,6 @@ int encode(){
 
     //make frequancy table
     frequencyCounter fq(in);
-    in.close();
     PriorityQueue<HuffmanTree> q;
 
     //turn frequencies into weighted huffman trees, and put in priority queue
@@ -51,6 +51,24 @@ int encode(){
     //get codeTable from the huffman tree
     string codeTable[128];
     daTree.populateHuffCodeTable(codeTable);
+
+    for(unsigned char c = 0; c < 128; c++){
+        if(!codeTable[c].empty()){
+            cout << c << ": " << codeTable[c] << endl;
+        }
+    }
+
+    in.clear();
+    in.seekg(0,ifstream::beg);
+
+    BitStream bs(codeTable);
+    bool done = false;
+    printf("encoding:\n");
+    while(!done){
+        char* buff = bs.getNext(in,&done);
+        printf("%x ", 0xff & *buff);
+    }
+    printf("\ndone\n");
 
     //encoding:
     //encode the number of characters, all of the characters and then all of their frequencies
@@ -83,9 +101,13 @@ int encode(){
     }
     out.write((char*)uiBuffer,sizeof(unsigned)*numOfChars);
 
+    in.clear();
+    in.seekg(0,ifstream::beg);
+
     out.close();
     //read file back
     return 0;
+
 }
 
 

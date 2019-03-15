@@ -2,13 +2,24 @@
 
 
 
-#ifndef HUFFMAN_PROJECT_CMPT225_BITSTREAM_H
-#define HUFFMAN_PROJECT_CMPT225_BITSTREAM_H
 
+#pragma once
 
+#include <fstream>
 class BitStream {
+
+private:
+    std::string* codeTable;
+    char* buffer;
+    std::string carryOver;
+public:
+
+    BitStream(std::string codeTable[128]);
+    ~BitStream();
+
+
+    char* getNext(std::ifstream& in, bool* done);
 
 };
 
 
-#endif //HUFFMAN_PROJECT_CMPT225_BITSTREAM_H
