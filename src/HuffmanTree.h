@@ -29,7 +29,7 @@ private:
 
     Node* root;
 
-    void codeTab(Node* root, char *s,unsigned n,std::string str[128]);
+    void codeTab(Node* root, char *s,unsigned n,std::string str[129]);
 
 public:
 

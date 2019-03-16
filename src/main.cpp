@@ -49,26 +49,8 @@ int encode(){
     }
 
     //get codeTable from the huffman tree
-    string codeTable[128];
+    string codeTable[129];
     daTree.populateHuffCodeTable(codeTable);
-
-    for(unsigned char c = 0; c < 128; c++){
-        if(!codeTable[c].empty()){
-            cout << c << ": " << codeTable[c] << endl;
-        }
-    }
-
-    in.clear();
-    in.seekg(0,ifstream::beg);
-
-    BitStream bs(codeTable);
-    bool done = false;
-    printf("encoding:\n");
-    while(!done){
-        char* buff = bs.getNext(in,&done);
-        printf("%x ", 0xff & *buff);
-    }
-    printf("\ndone\n");
 
     //encoding:
     //encode the number of characters, all of the characters and then all of their frequencies
@@ -103,7 +85,12 @@ int encode(){
 
     in.clear();
     in.seekg(0,ifstream::beg);
-
+    BitStream bs(codeTable);
+    bool done = false;
+    while(!done){
+        char* buff = bs.getNext(in,&done);
+        out.write(buff,1);
+    }
     out.close();
     //read file back
     return 0;
@@ -125,6 +112,25 @@ int decode(){
     for(int i = 0; i < num; i++){
         cout << buffer[i] << " : " << freqs[i] << endl;
     }
+    PriorityQueue<HuffmanTree> q;
+    for(int i = 0; i < num; i++){
+        HuffmanTree huff(freqs[i],buffer[i]);
+        q.enqueue(huff);
+    }
+
+    //add trees together, and place back into queue until the queue is empty
+    HuffmanTree daTree = q.peek();
+    q.dequeue();
+    while(!q.isEmpty()){
+        HuffmanTree huff2 = q.peek();
+        q.dequeue();
+        HuffmanTree huff3(daTree,huff2);
+        q.enqueue(huff3);
+        daTree = q.peek();
+        q.dequeue();
+    }
+
+
     return 0;
 }
 
