@@ -14,7 +14,7 @@ public:
 
     frequencyCounter(std::ifstream& in);
 
-    unsigned getFreqOfChar(char c);
+    unsigned getFreqOfChar(unsigned char c);
 
 
 };

@@ -8,13 +8,14 @@
 #include "PriorityQueue.h"
 #include "HuffmanTree.h"
 #include "BitStream.h"
+#include <string.h>
 
 
 using namespace std;
 
-int encode(){
+int compress(const string& txtName, const string& cmpName){
 
-    ifstream in("../../res/Muppets.txt");
+    ifstream in(txtName);
 
     if(!in.is_open()){
         cout << "There was an error opening the file" << endl;
@@ -27,7 +28,7 @@ int encode(){
 
     //turn frequencies into weighted huffman trees, and put in priority queue
     char numOfChars = 0;
-    for(unsigned char c = 0; c < 128; c++){
+    for(unsigned char c = 0; c < 129; c++){
         unsigned f = fq.getFreqOfChar(c);
         if(f == 0)continue;
         HuffmanTree huff = HuffmanTree(f,c);
@@ -54,7 +55,7 @@ int encode(){
 
     //encoding:
     //encode the number of characters, all of the characters and then all of their frequencies
-    ofstream out("../../res/Muppets.huff", ios::binary);
+    ofstream out(cmpName, ios::binary);
     if(!out.is_open()){
         cout << "something went wrong when trying to open huff file" << endl;
         return 1;
@@ -66,21 +67,15 @@ int encode(){
 
     //write all of the characters that are
     buffer = new char[numOfChars];
+    unsigned* uiBuffer = new unsigned[numOfChars*4];
     int i = 0;
-    for(unsigned char c = 0; c < 128; c++){
+    for(unsigned char c = 0; c < 129; c++){
         if(codeTable[c].empty())continue;
         buffer[i] = c;
-        i++;
-    }
-    out.write(buffer,sizeof(char)*numOfChars);
-
-    unsigned* uiBuffer = new unsigned[numOfChars*4];
-    i=0;
-    for(unsigned char c = 0; c < 128; c++){
-        if(codeTable[c].empty())continue;
         uiBuffer[i] = fq.getFreqOfChar(c);
         i++;
     }
+    out.write(buffer,sizeof(char)*numOfChars);
     out.write((char*)uiBuffer,sizeof(unsigned)*numOfChars);
 
     in.clear();
@@ -91,6 +86,7 @@ int encode(){
         char* buff = bs.getNext(in,&done);
         out.write(buff,1);
     }
+
     out.close();
     //read file back
     return 0;
@@ -98,8 +94,11 @@ int encode(){
 }
 
 
-int decode(){
-    ifstream in("../../res/Muppets.huff", ios::binary);
+int decompress(const string& txtName, const string& cmpName){
+    ifstream in(cmpName, ios::binary);
+
+    if(!in)return 1;
+
     char num;
     in.read(&num,sizeof(char));
 
@@ -109,9 +108,6 @@ int decode(){
     unsigned* freqs = new unsigned[num];
     in.read((char*)freqs,sizeof(unsigned)*num);
 
-    for(int i = 0; i < num; i++){
-        cout << buffer[i] << " : " << freqs[i] << endl;
-    }
     PriorityQueue<HuffmanTree> q;
     for(int i = 0; i < num; i++){
         HuffmanTree huff(freqs[i],buffer[i]);
@@ -130,11 +126,29 @@ int decode(){
         q.dequeue();
     }
 
+    ofstream out(txtName);
+
+    bool done = false;
+    char c = daTree.getChar(in,&done);
+    while(!done){
+        out << c;
+        c = daTree.getChar(in,&done);
+    }
+
+    out.close();
 
     return 0;
 }
 
-int main(){
-    encode();
-    decode();
+int main(int argc,char** argv){
+    if(argc != 4){
+        cout << "Incorrect number of arguments" << endl;
+    }
+    if(strcmp("-c",argv[1]) == 0){
+        return compress(argv[2], argv[3]);
+    }else if (strcmp("-d",argv[1]) == 0){
+        return decompress(argv[3], argv[2]);
+    }else {
+        cout << "argument 1 is not recognized" << endl;
+    }
 }

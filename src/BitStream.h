@@ -14,7 +14,7 @@ private:
     std::string carryOver;
 public:
 
-    BitStream(std::string codeTable[128]);
+    BitStream(std::string codeTable[129]);
     ~BitStream();
 
 

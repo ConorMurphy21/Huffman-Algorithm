@@ -6,6 +6,7 @@
 #pragma once
 
 #include <string>
+#include <fstream>
 
 class HuffmanTree {
 
@@ -18,11 +19,11 @@ private:
     private:
         Node* left;
         Node* right;
-        char val;
+        unsigned char val;
     public:
-        Node(char val);
+        Node(unsigned char val);
         void attachNodes(Node* a, Node* b);
-        char getVal();
+        unsigned char getVal();
         Node* getLeft();
         Node* getRight();
     };
@@ -35,9 +36,11 @@ public:
 
     HuffmanTree(const HuffmanTree& a,const HuffmanTree &b);
 
-    HuffmanTree(unsigned weight, char c);
+    HuffmanTree(unsigned weight, unsigned char c);
 
     HuffmanTree();
+
+    char getChar(std::ifstream& in, bool* done);
 
     void populateHuffCodeTable(std::string *table);
 
