@@ -19,6 +19,11 @@ int compress(const string& txtName, const string& cmpName){
 
     if(!in.is_open()){
         cout << "There was an error opening the file" << endl;
+        return 1;
+    }
+
+    if(!in.peek()){
+        ofstream out(cmpName);
         return 0;
     }
 
@@ -98,6 +103,11 @@ int decompress(const string& txtName, const string& cmpName){
     ifstream in(cmpName, ios::binary);
 
     if(!in)return 1;
+
+    if(!in.peek()){
+        ofstream out(txtName);
+        return 0;
+    }
 
     char num;
     in.read(&num,sizeof(char));
