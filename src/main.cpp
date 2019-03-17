@@ -151,14 +151,56 @@ int decompress(const string& txtName, const string& cmpName){
 }
 
 int main(int argc,char** argv){
+
+
     if(argc != 4){
         cout << "Incorrect number of arguments" << endl;
     }
     if(strcmp("-c",argv[1]) == 0){
-        return compress(argv[2], argv[3]);
+        int m;
+        for( m = 0; ; m++){
+            if(argv[2][m] == '.') break;
+        }
+
+        if(argv[2][m+1] == 't' && argv[2][m+2] == 'x' && argv[2][m+3] == 't') {
+
+            for(m = 0 ; ; m++){
+                if(argv[3][m] == '.')break;
+            }
+            if(argv[3][m+1] == 'h' && argv[3][m+2] == 'u' && argv[3][m+3] == 'f' && argv[3][m+4] == 'f')
+            return compress(argv[2], argv[3]);
+            else{
+                cout<<"Incorrect destination"<<endl;
+                return -1;
+            }
+        }
+        else {
+            cout<<"Incorrect source"<<endl;
+            return -1;
+        }
     }else if (strcmp("-d",argv[1]) == 0){
-        return decompress(argv[3], argv[2]);
+        int m;
+        for( m = 0; ; m++){
+            if(argv[2][m] == '.') break;
+        }
+
+        if(argv[2][m+1] == 'h' && argv[2][m+2] == 'u' && argv[2][m+3] == 'f' && argv[2][m+4] == 'f') {
+            for(m = 0 ; ; m++){
+                if(argv[3][m] == '.')break;
+            }
+            if(argv[3][m+1] == 't' && argv[3][m+2] == 'x' && argv[3][m+3] == 't'){
+                return decompress(argv[3], argv[2]);
+            }else {
+                cout<<"Incorrect destination"<<endl;
+                return -1;
+        }
+        }
+        else {
+            cout<<"Incorrect Source"<<endl;
+            return -1;
+        }
     }else {
         cout << "argument 1 is not recognized" << endl;
+        return -1;
     }
 }

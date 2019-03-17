@@ -1,10 +1,10 @@
-//
-// Created by mahee on 2019-03-09.
-//
-
+/*
+ * Description : To read bits from a file
+ *
+ */
 #include "BitStream.h"
 
-
+// constructor implementation
 BitStream::BitStream(std::string codeTable[129]) {
     this->buffer = new char[1];
     this->codeTable = codeTable;
@@ -14,28 +14,28 @@ BitStream::~BitStream() {
 }
 
 
-
+//gets the
 char* BitStream::getNext(std::ifstream& in, bool* done) {
     static bool onEof;
-    unsigned char buff = 0;
+    unsigned char buff = 0; // buff al 0s.
     char c;
     std::string code = carryOver;
     int i = 0;
     for( ; ; ) {
         for (unsigned j = 0; j < code.length(); j++) {
             i++;
-            buff <<= 1;
-            if (code.at(j) == '1')buff |= 0x1;
-            if (i >= 8) {
+            buff <<= 1; // right shift buff.
+            if (code.at(j) == '1')buff |= 0x1;  // checks if the string code has '1' at jth position and makes buff = 1 if it does
+            if (i >= 8) {   //when i is at least 8, change carryover to the changed code from above
                 carryOver = code.substr(j + 1);
-                break;
+                break; //move out of the nested loop
             }
         }
-        if (i >= 8)break;
+        if (i >= 8)break; // move out of the final loop.
 
-        if(onEof){
+        if(onEof){  //if file ends
             *done = true;
-            buff <<= (8-i);
+            buff <<= (8-i); // if the last 8 bits not complete, we shift it.
             break;
         }
 
