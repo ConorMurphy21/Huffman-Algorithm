@@ -15,6 +15,14 @@
 
 using namespace std;
 
+bool checkExtension(const string& a){
+    int i;
+    for(i = 0 ; ; i++){
+        if( a[i] == '.') break;
+    }
+    return (a[i+1] == 'h' && a[i+2] == 'u' && a[i+3] == 'f' && a[i+4] == 'f');
+}
+
 int compress(const string& txtName, const string& cmpName){
 
     ifstream in(txtName); //opening file
@@ -161,11 +169,20 @@ int main(int argc,char** argv){
     }
     //Case of compression
     if(strcmp("-c",argv[1]) == 0){
+            if(checkExtension(argv[3]))
                return compress(argv[2], argv[3]);
+            else {
+                cerr <<"Incorrect destination";
+                return -1;
+            }
     }
     else if (strcmp("-d",argv[1]) == 0){   //Case of decompression
-
+        if(checkExtension(argv[2]))
                 return decompress(argv[3], argv[2]);
+        else{
+            cerr << "Incorrect Source";
+            return -1;
+        }
     }else {
         cerr << "argument 1 is not recognized" << endl;
         return -1;
