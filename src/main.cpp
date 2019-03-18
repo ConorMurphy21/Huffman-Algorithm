@@ -1,7 +1,9 @@
-//
-// Created by mahee on 2019-03-11.
-//
+/*
+ * Desc : Contains the main() of the application. Also contains the algorithms to compress and decompress
+ * the required text file.
+ */
 
+// Header files
 #include <iostream>
 #include <fstream>
 #include "frequencyCounter.h"
@@ -15,10 +17,10 @@ using namespace std;
 
 int compress(const string& txtName, const string& cmpName){
 
-    ifstream in(txtName);
+    ifstream in(txtName); //opening file
 
     if(!in.is_open()){
-        cout << "There was an error opening the file" << endl;
+        cerr << "There was an error opening the file" << endl;
         return 1;
     }
 
@@ -62,7 +64,7 @@ int compress(const string& txtName, const string& cmpName){
     //encode the number of characters, all of the characters and then all of their frequencies
     ofstream out(cmpName, ios::binary);
     if(!out.is_open()){
-        cout << "something went wrong when trying to open huff file" << endl;
+        cerr << "something went wrong when trying to open huff file" << endl;
         return 1;
     }
 
@@ -105,7 +107,7 @@ int decompress(const string& txtName, const string& cmpName){
     if(!in)return 1;
 
     if(!in.peek()){
-        ofstream out(txtName);
+        ofstream out(txtName);  //File is empty. So close it and return 0.
         return 0;
     }
 
@@ -136,7 +138,7 @@ int decompress(const string& txtName, const string& cmpName){
         q.dequeue();
     }
 
-    ofstream out(txtName);
+    ofstream out(txtName); //Close the file
 
     bool done = false;
     char c = daTree.getChar(in,&done);
@@ -150,57 +152,23 @@ int decompress(const string& txtName, const string& cmpName){
     return 0;
 }
 
+//Main starts here
 int main(int argc,char** argv){
 
-
+//Checking args
     if(argc != 4){
-        cout << "Incorrect number of arguments" << endl;
+        cerr << "Incorrect number of arguments" << endl;
     }
+    //Case of compression
     if(strcmp("-c",argv[1]) == 0){
-        int m;
-        for( m = 0; ; m++){
-            if(argv[2][m] == '.') break;
-        }
+               return compress(argv[2], argv[3]);
+    }
+    else if (strcmp("-d",argv[1]) == 0){   //Case of decompression
 
-        if(argv[2][m+1] == 't' && argv[2][m+2] == 'x' && argv[2][m+3] == 't') {
-
-            for(m = 0 ; ; m++){
-                if(argv[3][m] == '.')break;
-            }
-            if(argv[3][m+1] == 'h' && argv[3][m+2] == 'u' && argv[3][m+3] == 'f' && argv[3][m+4] == 'f')
-            return compress(argv[2], argv[3]);
-            else{
-                cout<<"Incorrect destination"<<endl;
-                return -1;
-            }
-        }
-        else {
-            cout<<"Incorrect source"<<endl;
-            return -1;
-        }
-    }else if (strcmp("-d",argv[1]) == 0){
-        int m;
-        for( m = 0; ; m++){
-            if(argv[2][m] == '.') break;
-        }
-
-        if(argv[2][m+1] == 'h' && argv[2][m+2] == 'u' && argv[2][m+3] == 'f' && argv[2][m+4] == 'f') {
-            for(m = 0 ; ; m++){
-                if(argv[3][m] == '.')break;
-            }
-            if(argv[3][m+1] == 't' && argv[3][m+2] == 'x' && argv[3][m+3] == 't'){
                 return decompress(argv[3], argv[2]);
-            }else {
-                cout<<"Incorrect destination"<<endl;
-                return -1;
-        }
-        }
-        else {
-            cout<<"Incorrect Source"<<endl;
-            return -1;
-        }
     }else {
-        cout << "argument 1 is not recognized" << endl;
+        cerr << "argument 1 is not recognized" << endl;
         return -1;
     }
 }
+//End of main

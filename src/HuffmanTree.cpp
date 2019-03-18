@@ -85,7 +85,7 @@ char HuffmanTree::getChar(std::ifstream& in, bool* done){
 
     for( ; ; ) {
         if(node->getVal() != 0){ //check if node is not 0
-            if(node->getVal() == 128) *done = true; //if get value
+            if(node->getVal() == 128) *done = true;
             return node->getVal();
         }
 

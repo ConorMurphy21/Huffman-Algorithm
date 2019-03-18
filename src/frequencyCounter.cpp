@@ -1,4 +1,10 @@
 
+/*
+ * Description : Counts the occurence of all characters in the input file
+ */
+
+
+//Header files
 #include "frequencyCounter.h"
 
 #include <iostream>
