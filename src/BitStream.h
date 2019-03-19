@@ -10,11 +10,11 @@ class BitStream {
 
 private:
     std::string* codeTable;
-    char* buffer;
+    char* buffer = new char[1];
     std::string carryOver;
 public:
 
-    BitStream(std::string codeTable[129]);
+    explicit BitStream(std::string* codeTable);
     ~BitStream();
 
 

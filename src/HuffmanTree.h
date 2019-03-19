@@ -8,6 +8,9 @@
 #include <string>
 #include <fstream>
 
+#define TNODEVAL 512
+#define EOFVAL 256
+
 class HuffmanTree {
 
 private:
@@ -19,26 +22,31 @@ private:
     private:
         Node* left;
         Node* right;
-        unsigned char val;
+        unsigned short val;
     public:
-        Node(unsigned char val);
+        Node(unsigned short val);
+        Node(Node* node);
         void attachNodes(Node* a, Node* b);
-        unsigned char getVal();
+        unsigned short getVal();
         Node* getLeft();
         Node* getRight();
     };
 
     Node* root;
 
-    void codeTab(Node* root, char *s,unsigned n,std::string str[129]);
+    void codeTab(Node* root, char *s,unsigned n,std::string str[257]);
 
 public:
 
-    HuffmanTree(const HuffmanTree& a,const HuffmanTree &b);
+    HuffmanTree(const HuffmanTree& a,const HuffmanTree& b);
 
-    HuffmanTree(unsigned weight, unsigned char c);
+    HuffmanTree(unsigned weight, unsigned short c);
 
     HuffmanTree();
+
+    ~HuffmanTree();
+
+    void deleteStuff(Node* root);
 
     char getChar(std::ifstream& in, bool* done);
 

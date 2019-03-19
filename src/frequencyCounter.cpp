@@ -11,14 +11,18 @@ frequencyCounter::frequencyCounter(std::ifstream& in){
         return;
     }
     char c;
-    while(in.get(c))
-        arr[c]++;
+    while(in.read(&c,sizeof(char)))
+        arr[(unsigned char)c]++;
 
     //128 is our end of character bit, so we need an encoding for it as well
-    arr[128] = 1;
+    arr[256] = 1;
 
 }
 
-unsigned frequencyCounter::getFreqOfChar(unsigned char c) {
+frequencyCounter::~frequencyCounter() {
+    delete[] arr;
+}
+
+unsigned frequencyCounter::getFreqOfChar(unsigned short c) {
     return arr[c];
 }

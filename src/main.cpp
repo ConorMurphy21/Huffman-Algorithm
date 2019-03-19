@@ -15,7 +15,7 @@ using namespace std;
 
 int compress(const string& txtName, const string& cmpName){
 
-    ifstream in(txtName);
+    ifstream in(txtName,ios::binary);
 
     if(!in.is_open()){
         cout << "There was an error opening the file" << endl;
@@ -33,14 +33,16 @@ int compress(const string& txtName, const string& cmpName){
 
     //turn frequencies into weighted huffman trees, and put in priority queue
     char numOfChars = 0;
-    for(unsigned char c = 0; c < 129; c++){
+    for(unsigned short c = 0; c < 257; c++){
         unsigned f = fq.getFreqOfChar(c);
         if(f == 0)continue;
-        HuffmanTree huff = HuffmanTree(f,c);
+        cout << (int)c << ": " << f <<endl;
+        HuffmanTree huff(f,c);
         q.enqueue(huff);
         //count the number of chars that appear for later
         numOfChars++;
     }
+    numOfChars--;
 
     //add trees together, and place back into queue until the queue is empty
     HuffmanTree daTree = q.peek();
@@ -55,7 +57,7 @@ int compress(const string& txtName, const string& cmpName){
     }
 
     //get codeTable from the huffman tree
-    string codeTable[129];
+    string* codeTable = new string[257];
     daTree.populateHuffCodeTable(codeTable);
 
     //encoding:
@@ -74,18 +76,25 @@ int compress(const string& txtName, const string& cmpName){
     buffer = new char[numOfChars];
     unsigned* uiBuffer = new unsigned[numOfChars*4];
     int i = 0;
-    for(unsigned char c = 0; c < 129; c++){
+    //we don't write the freq of the null char because the decoder will know its 1
+    for(unsigned short c = 0; c < 256; c++){
         if(codeTable[c].empty())continue;
-        buffer[i] = c;
+        buffer[i] = (char)c;
         uiBuffer[i] = fq.getFreqOfChar(c);
+        cout << c << ": " << fq.getFreqOfChar(c) << " " << codeTable[c] << endl;
         i++;
     }
+
+    cout << 256 << ": " << fq.getFreqOfChar(256)<< " " << codeTable[256] << endl;
     out.write(buffer,sizeof(char)*numOfChars);
     out.write((char*)uiBuffer,sizeof(unsigned)*numOfChars);
 
-    in.clear();
-    in.seekg(0,ifstream::beg);
+
     BitStream bs(codeTable);
+
+
+    in.clear();
+    in.seekg(0,ios::beg);
     bool done = false;
     while(!done){
         char* buff = bs.getNext(in,&done);
@@ -93,6 +102,7 @@ int compress(const string& txtName, const string& cmpName){
     }
 
     out.close();
+    in.close();
     //read file back
     return 0;
 
@@ -120,9 +130,11 @@ int decompress(const string& txtName, const string& cmpName){
 
     PriorityQueue<HuffmanTree> q;
     for(int i = 0; i < num; i++){
-        HuffmanTree huff(freqs[i],buffer[i]);
+        HuffmanTree huff(freqs[i],(unsigned short)buffer[i]);
         q.enqueue(huff);
     }
+    HuffmanTree huffhuff(1,256);
+    q.enqueue(huffhuff);
 
     //add trees together, and place back into queue until the queue is empty
     HuffmanTree daTree = q.peek();
@@ -135,6 +147,15 @@ int decompress(const string& txtName, const string& cmpName){
         daTree = q.peek();
         q.dequeue();
     }
+
+
+    string codeTable[257];
+    daTree.populateHuffCodeTable(codeTable);
+    for(int i = 0; i < num; i++){
+        cout << (int)buffer[i] << ": " << freqs[i] <<" "<< codeTable[buffer[i]] << endl;
+    }
+
+    cout << 256 << ": 1 " << codeTable[256] << endl;
 
     ofstream out(txtName);
 

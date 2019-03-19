@@ -8,13 +8,15 @@
 
 class frequencyCounter {
 private:
-     unsigned arr[129] = {0};
+     unsigned* arr = new unsigned[257]{0};
 
 public:
 
-    frequencyCounter(std::ifstream& in);
+    explicit frequencyCounter(std::ifstream& in);
 
-    unsigned getFreqOfChar(unsigned char c);
+    ~frequencyCounter();
+
+    unsigned getFreqOfChar(unsigned short c);
 
 
 };
