@@ -9,7 +9,7 @@
 
 class frequencyCounter {
 private:
-     unsigned* arr = new unsigned[257]{0};
+     unsigned* arr;
 
 public:
 

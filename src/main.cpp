@@ -25,7 +25,7 @@ bool checkExtension(const string& a){
 
 int compress(const string& txtName, const string& cmpName){
 
-    ifstream in(txtName);//opening file
+    ifstream in(txtName,ios::binary);//opening file
 
     if(!in.is_open()){
         cout << "There was an error opening the file" << endl;
@@ -39,11 +39,11 @@ int compress(const string& txtName, const string& cmpName){
 
     //make frequancy table
     frequencyCounter fq(in);
-    fq.print();
     PriorityQueue<HuffmanTree> q;
 
+
     //turn frequencies into weighted huffman trees, and put in priority queue
-    char numOfChars = 0;
+    unsigned int numOfChars = 0;
     for(unsigned short c = 0; c < 257; c++){
         unsigned f = fq.getFreqOfChar(c);
         if(f == 0)continue;
@@ -53,6 +53,7 @@ int compress(const string& txtName, const string& cmpName){
         numOfChars++;
     }
     numOfChars--;
+
 
     //add trees together, and place back into queue until the queue is empty
     HuffmanTree daTree = q.peek();
@@ -70,6 +71,10 @@ int compress(const string& txtName, const string& cmpName){
     string* codeTable = new string[257];
     daTree.populateHuffCodeTable(codeTable);
 
+    for(unsigned short i = 0; i < 257; i++){
+        cout << i << ": " << fq.getFreqOfChar(i) << " " << codeTable[i] << endl;
+    }
+
     //encoding:
     //encode the number of characters, all of the characters and then all of their frequencies
     ofstream out(cmpName, ios::binary);
@@ -78,25 +83,26 @@ int compress(const string& txtName, const string& cmpName){
         return 1;
     }
 
+    char* numOfCharsPtr = (char*)&numOfChars;
     //write the number of chars
-    char* buffer = &numOfChars;
-    out.write(buffer,sizeof(char));
-
+    out.write(numOfCharsPtr,sizeof(unsigned));
     //write all of the characters that are
-    buffer = new char[numOfChars];
+    char* buffer = new char[numOfChars];
     unsigned* uiBuffer = new unsigned[numOfChars*4];
     int i = 0;
     //we don't write the freq of the null char because the decoder will know its 1
     for(unsigned short c = 0; c < 256; c++){
         if(codeTable[c].empty())continue;
-        buffer[i] = (char)c;
+        buffer[i] = (unsigned char)c;
         uiBuffer[i] = fq.getFreqOfChar(c);
         i++;
     }
 
-    out.write(buffer,sizeof(char)*numOfChars);
+    out.write(buffer,sizeof(unsigned char)*numOfChars);
     out.write((char*)uiBuffer,sizeof(unsigned)*numOfChars);
 
+    delete[] buffer;
+    delete[] uiBuffer;
 
     BitStream bs(codeTable);
 
@@ -108,7 +114,7 @@ int compress(const string& txtName, const string& cmpName){
         char* buff = bs.getNext(in,&done);
         out.write(buff,1);
     }
-
+    delete[] codeTable;
     out.close();
     in.close();
     //read file back
@@ -122,16 +128,16 @@ int decompress(const string& txtName, const string& cmpName){
 
     if(!in)return 1;
 
-    if(!in.peek()){
-        ofstream out(txtName);  //File is empty. So close it and return 0.
-        return 0;
-    }
+    //if(!in.peek()){
+        //ofstream out(txtName);  //File is empty. So close it and return 0.
+        //return 1;
+    //}
 
-    char num;
-    in.read(&num,sizeof(char));
-
-    char* buffer = new char[num];
-    in.read(buffer,sizeof(char)*num);
+    unsigned n;
+    in.read((char*)&n,sizeof(unsigned));
+    unsigned int num = n;
+    unsigned char* buffer = new unsigned char[num];
+    in.read((char*)buffer,sizeof(char)*num);
 
     unsigned* freqs = new unsigned[num];
     in.read((char*)freqs,sizeof(unsigned)*num);
@@ -156,12 +162,23 @@ int decompress(const string& txtName, const string& cmpName){
         q.dequeue();
     }
 
-    ofstream out(txtName);
+    string* codeTable = new string[257];
+    daTree.populateHuffCodeTable(codeTable);
+
+    for(unsigned short i = 0; i < n; i++){
+        cout << (unsigned)buffer[i] << ": " <<  freqs[i] << " " << codeTable[(unsigned short)buffer[i]] << endl;
+    }
+
+    delete[] buffer;
+    delete[] freqs;
+    delete[] codeTable;
+
+    ofstream out(txtName,ios::binary);
 
     bool done = false;
     char c = daTree.getChar(in,&done);
     while(!done){
-        out << c;
+        out.write(&c,sizeof(char));
         c = daTree.getChar(in,&done);
     }
 

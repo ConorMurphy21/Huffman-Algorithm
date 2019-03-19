@@ -106,7 +106,7 @@ bool PriorityQueue<T>::isEmpty() const {
 }
 
 template<class T>
-bool PriorityQueue<T>::enqueue(const T &newElement) {
+bool PriorityQueue<T>::enqueue(const T& newElement) {
 
     if(isEmpty()){
         head = new Node<T>(newElement, NULL);

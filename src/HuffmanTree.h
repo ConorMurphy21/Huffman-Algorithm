@@ -25,7 +25,6 @@ private:
         unsigned short val;
     public:
         Node(unsigned short val); //constructor
-        Node(Node* node);
         void attachNodes(Node* a, Node* b);
         unsigned short getVal();
         Node* getLeft();

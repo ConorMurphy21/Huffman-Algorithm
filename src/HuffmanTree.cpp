@@ -16,20 +16,12 @@
 // Node constructor with a value
 HuffmanTree::Node::Node(unsigned short val) {
     this->val = val;
-    this->left = nullptr;
-    this->right = nullptr;
-}
-
-HuffmanTree::Node::Node(HuffmanTree::Node *node) {
-    this->val = node->getVal();
-    if(val == TNODEVAL) {
-        this->left = new Node(node->getLeft());
-        this->right = new Node(node->getRight());
-    }
+    this->left = NULL;
+    this->right = NULL;
 }
 
 //Attaching two nodes given their addresses
-void HuffmanTree::Node::attachNodes(HuffmanTree::Node *left, HuffmanTree::Node *right) {
+void HuffmanTree::Node::attachNodes(HuffmanTree::Node* left, HuffmanTree::Node* right) {
     this->left = left;
     this->right = right;
 }
@@ -61,9 +53,7 @@ HuffmanTree::HuffmanTree(const HuffmanTree& a, const HuffmanTree& b) {
     this->weight = a.weight + b.weight;
     this->height = (a.height > b.height) ? a.height+1:b.height+1;
     this->root = new Node(512);
-    Node* an = new Node(a.root);
-    Node* bn = new Node(b.root);
-    this->root->attachNodes(an,bn);
+    this->root->attachNodes(a.root,b.root);
 }
 //End Node Methods
 
@@ -72,6 +62,7 @@ HuffmanTree::HuffmanTree(const HuffmanTree& a, const HuffmanTree& b) {
 HuffmanTree::HuffmanTree() {
     this->weight = 0;
     this->root = NULL;
+    this->height = 0;
 }
 
 //Poppulate the code table recursively
@@ -113,10 +104,10 @@ HuffmanTree::~HuffmanTree() {
 }
 
 void HuffmanTree::deleteStuff(HuffmanTree::Node* root){
-    if(root->getVal() == TNODEVAL) {
-        deleteStuff(root->getLeft());
-        deleteStuff(root->getLeft());
-    }
+    if(root == NULL)return;
+    if(root->getLeft() != NULL)deleteStuff(root->getLeft());
+    if(root->getRight() != NULL)deleteStuff(root->getLeft());
+
     delete root;
 }
 
