@@ -32,10 +32,14 @@ int compress(const string& txtName, const string& cmpName){
         return 1;
     }
 
-    if(!in.peek()){
-        ofstream out(cmpName);
+    in.seekg(0, ios::end);
+    if (in.tellg() == 0) {
+        ofstream of(txtName);
         return 0;
     }
+    in.clear();
+    in.seekg(0,ios::beg);
+
 
     //make frequancy table
     frequencyCounter fq(in);
@@ -128,10 +132,13 @@ int decompress(const string& txtName, const string& cmpName){
 
     if(!in)return 1;
 
-    //if(!in.peek()){
-        //ofstream out(txtName);  //File is empty. So close it and return 0.
-        //return 1;
-    //}
+    in.seekg(0, ios::end);
+    if (in.tellg() == 0) {
+        ofstream of(txtName);
+        return 0;
+    }
+    in.clear();
+    in.seekg(0,ios::beg);
 
     unsigned n;
     in.read((char*)&n,sizeof(unsigned));
