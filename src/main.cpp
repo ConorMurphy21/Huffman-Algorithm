@@ -1,7 +1,9 @@
-//
-// Created by mahee on 2019-03-11.
-//
+/*
+ * Desc : Contains the main() of the application. Also contains the algorithms to compress and decompress
+ * the required text file.
+ */
 
+// Header files
 #include <iostream>
 #include <fstream>
 #include "frequencyCounter.h"
@@ -13,9 +15,17 @@
 
 using namespace std;
 
+bool checkExtension(const string& a){
+    int i;
+    for(i = 0 ; ; i++){
+        if( a[i] == '.') break;
+    }
+    return (a[i+1] == 'h' && a[i+2] == 'u' && a[i+3] == 'f' && a[i+4] == 'f');
+}
+
 int compress(const string& txtName, const string& cmpName){
 
-    ifstream in(txtName,ios::binary);
+    ifstream in(txtName,ios::binary);//opening file
 
     if(!in.is_open()){
         cout << "There was an error opening the file" << endl;
@@ -36,7 +46,6 @@ int compress(const string& txtName, const string& cmpName){
     for(unsigned short c = 0; c < 257; c++){
         unsigned f = fq.getFreqOfChar(c);
         if(f == 0)continue;
-        cout << (int)c << ": " << f <<endl;
         HuffmanTree huff(f,c);
         q.enqueue(huff);
         //count the number of chars that appear for later
@@ -81,11 +90,9 @@ int compress(const string& txtName, const string& cmpName){
         if(codeTable[c].empty())continue;
         buffer[i] = (char)c;
         uiBuffer[i] = fq.getFreqOfChar(c);
-        cout << c << ": " << fq.getFreqOfChar(c) << " " << codeTable[c] << endl;
         i++;
     }
 
-    cout << 256 << ": " << fq.getFreqOfChar(256)<< " " << codeTable[256] << endl;
     out.write(buffer,sizeof(char)*numOfChars);
     out.write((char*)uiBuffer,sizeof(unsigned)*numOfChars);
 
@@ -115,7 +122,7 @@ int decompress(const string& txtName, const string& cmpName){
     if(!in)return 1;
 
     if(!in.peek()){
-        ofstream out(txtName);
+        ofstream out(txtName);  //File is empty. So close it and return 0.
         return 0;
     }
 
@@ -148,15 +155,6 @@ int decompress(const string& txtName, const string& cmpName){
         q.dequeue();
     }
 
-
-    string codeTable[257];
-    daTree.populateHuffCodeTable(codeTable);
-    for(int i = 0; i < num; i++){
-        cout << (int)buffer[i] << ": " << freqs[i] <<" "<< codeTable[buffer[i]] << endl;
-    }
-
-    cout << 256 << ": 1 " << codeTable[256] << endl;
-
     ofstream out(txtName);
 
     bool done = false;
@@ -171,10 +169,14 @@ int decompress(const string& txtName, const string& cmpName){
     return 0;
 }
 
+//Main starts here
 int main(int argc,char** argv){
+
+//Checking args
     if(argc != 4){
         cout << "Incorrect number of arguments" << endl;
     }
+    //Case of compression
     if(strcmp("-c",argv[1]) == 0){
         return compress(argv[2], argv[3]);
     }else if (strcmp("-d",argv[1]) == 0){
@@ -183,3 +185,4 @@ int main(int argc,char** argv){
         cout << "argument 1 is not recognized" << endl;
     }
 }
+//End of main

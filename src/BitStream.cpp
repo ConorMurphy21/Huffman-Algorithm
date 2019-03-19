@@ -1,10 +1,11 @@
-//
-// Created by mahee on 2019-03-09.
-//
-
+/*
+ * Description : To read bits from a file
+ *
+ */
 #include "BitStream.h"
 
 
+// constructor implementation
 BitStream::BitStream(std::string* codeTable) {
     this->buffer = new char[1];
     this->codeTable = codeTable;
@@ -14,7 +15,7 @@ BitStream::~BitStream() {
 }
 
 
-
+//gets the
 char* BitStream::getNext(std::ifstream& in, bool* done) {
     static bool onEof;
     unsigned char buff = 0; // buff al 0s.

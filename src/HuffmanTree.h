@@ -1,10 +1,10 @@
-//
-// Created by mahee on 2019-03-11.
-//
 
+/*
+ * Description : implementation of the Huffman tree
+ */
 
 #pragma once
-
+//Header files
 #include <string>
 #include <fstream>
 
@@ -20,11 +20,11 @@ private:
 
     class Node{
     private:
-        Node* left;
-        Node* right;
+        Node* left; //left subtree
+        Node* right; //right subtree
         unsigned short val;
     public:
-        Node(unsigned short val);
+        Node(unsigned short val); //constructor
         Node(Node* node);
         void attachNodes(Node* a, Node* b);
         unsigned short getVal();
@@ -38,23 +38,31 @@ private:
 
 public:
 
+
+    //Constructor with two tree. Function joins them.
     HuffmanTree(const HuffmanTree& a,const HuffmanTree& b);
 
+    //Constructor with weight and character
     HuffmanTree(unsigned weight, unsigned short c);
 
+    // Default constructor
     HuffmanTree();
 
     ~HuffmanTree();
 
     void deleteStuff(Node* root);
 
+    // Returns the next character from the tree to be put in order
     char getChar(std::ifstream& in, bool* done);
 
+    // Adds values to the table to maintain for order
     void populateHuffCodeTable(std::string *table);
 
+
+    //Overloading few operators for convenience
     friend bool operator < (const HuffmanTree& a, const HuffmanTree& b);
     friend bool operator <= (const HuffmanTree& a, const HuffmanTree& b);
 
 };
 
-
+//End of header file
