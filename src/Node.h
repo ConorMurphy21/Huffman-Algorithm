@@ -10,11 +10,9 @@ template<class T>
 class Node
 {
 public:
-	// Public attributes - Why are the attributes public?
 	T data;     // The data in the node
 	Node* next;   // Pointer to next node
 	
-	// Constructors (why no destructor?)
 	Node();
 	Node(T theData);
 	Node(T theData, Node* theNextNode);

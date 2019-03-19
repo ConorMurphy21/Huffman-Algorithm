@@ -1,4 +1,13 @@
 
+/* File name : Hufmmantree.cpp
+ * Desc : A special implementation of the binary tree, Used to encode and decode each occurrence in binary to compress files.
+ * Uses the "Huffman Algorithm"  published by Huffman in 1952.
+ *
+ * made by - Maheeppartap Singh and Conor Murphy
+ */
+
+
+//Header files
 #include "HuffmanTree.h"
 #include <iostream>
 
@@ -70,13 +79,13 @@ HuffmanTree::Node* HuffmanTree::Node::getRight() {
 }
 
 
-
+//Poppulate the code table recursively
 void HuffmanTree::populateHuffCodeTable(std::string *table){
     char s[height];
     codeTab(root,s,0,table);
 }
 
-
+//Gets the next char from the tree to decode
 char HuffmanTree::getChar(std::ifstream& in, bool* done){
     static char c;
     static short n = 8;
@@ -108,7 +117,7 @@ char HuffmanTree::getChar(std::ifstream& in, bool* done){
     }
 
 }
-
+//Used to put the poppulate the tree
 void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::string table[129]) {
     if(root->getVal() != 0){
         std::string code;
@@ -126,3 +135,4 @@ void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::strin
 
 }
 
+//End of HuffmanTree.cpp
