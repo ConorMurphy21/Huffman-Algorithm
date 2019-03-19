@@ -190,8 +190,10 @@ int main(int argc,char** argv){
     }
     //Case of compression
     if(strcmp("-c",argv[1]) == 0){
+            if(checkExtension(argv[3]))
         return compress(argv[2], argv[3]);
     }else if (strcmp("-d",argv[1]) == 0){
+        if(checkExtension(argv[2]))
         return decompress(argv[3], argv[2]);
     }else {
         cout << "argument 1 is not recognized" << endl;
