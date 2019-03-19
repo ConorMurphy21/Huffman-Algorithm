@@ -39,6 +39,7 @@ int compress(const string& txtName, const string& cmpName){
 
     //make frequancy table
     frequencyCounter fq(in);
+    fq.print();
     PriorityQueue<HuffmanTree> q;
 
     //turn frequencies into weighted huffman trees, and put in priority queue

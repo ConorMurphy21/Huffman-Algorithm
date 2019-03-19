@@ -58,6 +58,7 @@ public:
     // Adds values to the table to maintain for order
     void populateHuffCodeTable(std::string *table);
 
+    void print();
 
     //Overloading few operators for convenience
     friend bool operator < (const HuffmanTree& a, const HuffmanTree& b);

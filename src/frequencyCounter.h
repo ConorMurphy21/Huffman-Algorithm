@@ -21,6 +21,7 @@ public:
     // counts frequency of all characters in file
     unsigned getFreqOfChar(unsigned short c);
 
+    void print();
 
 };
 
