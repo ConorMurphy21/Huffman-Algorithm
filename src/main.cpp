@@ -25,7 +25,7 @@ bool checkExtension(const string& a){
 
 int compress(const string& txtName, const string& cmpName){
 
-    ifstream in(txtName,ios::binary);//opening file
+    ifstream in(txtName);//opening file
 
     if(!in.is_open()){
         cout << "There was an error opening the file" << endl;
