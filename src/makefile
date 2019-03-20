@@ -1,7 +1,7 @@
 all: x
 
 x: Main.o PriorityQueue.h Node.h BitStream.o FrequencyCounter.o HuffmanTree.o
-    g++ -Wall -o main Main.o BitStream.o FrequencyCounter.o HuffmanTree.o
+    g++ -Wall -o huff Main.o BitStream.o FrequencyCounter.o HuffmanTree.o
 
 Main.o: Main.cpp
     g++ -c -std=c++17 Main.cpp
