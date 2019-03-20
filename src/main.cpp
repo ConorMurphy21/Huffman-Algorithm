@@ -186,6 +186,7 @@ int main(int argc,char** argv){
 //Checking args
     if(argc != 4){
         cout << "Incorrect number of arguments" << endl;
+        return 1;
     }
     //Case of compression
     if(strcmp("-c",argv[1]) == 0){
