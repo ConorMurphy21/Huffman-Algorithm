@@ -15,14 +15,6 @@
 
 using namespace std;
 
-bool checkExtension(const string& a){
-    int i;
-    for(i = 0 ; ; i++){
-        if( a[i] == '.') break;
-    }
-    return (a[i+1] == 'h' && a[i+2] == 'u' && a[i+3] == 'f' && a[i+4] == 'f');
-}
-
 int compress(const string& txtName, const string& cmpName){
 
     ifstream in(txtName,ios::binary);//opening file
@@ -33,18 +25,20 @@ int compress(const string& txtName, const string& cmpName){
     }
 
     in.seekg(0, ios::end);
-    if (in.tellg() == 0) {
+    ifstream::pos_type size = in.tellg();
+    cout << txtName << " -> " << size << " bytes" << endl;
+    if (size == 0) {
         ofstream of(txtName);
+        cout << cmpName << " -> 0 bytes" << endl;
         return 0;
     }
+
     in.clear();
     in.seekg(0,ios::beg);
-
 
     //make frequancy table
     frequencyCounter fq(in);
     PriorityQueue<HuffmanTree> q;
-
 
     //turn frequencies into weighted huffman trees, and put in priority queue
     unsigned int numOfChars = 0;
@@ -57,7 +51,6 @@ int compress(const string& txtName, const string& cmpName){
         numOfChars++;
     }
     numOfChars--;
-
 
     //add trees together, and place back into queue until the queue is empty
     HuffmanTree daTree = q.peek();
@@ -74,10 +67,6 @@ int compress(const string& txtName, const string& cmpName){
     //get codeTable from the huffman tree
     string* codeTable = new string[257];
     daTree.populateHuffCodeTable(codeTable);
-
-    for(unsigned short i = 0; i < 257; i++){
-        cout << i << ": " << fq.getFreqOfChar(i) << " " << codeTable[i] << endl;
-    }
 
     //encoding:
     //encode the number of characters, all of the characters and then all of their frequencies
@@ -110,7 +99,6 @@ int compress(const string& txtName, const string& cmpName){
 
     BitStream bs(codeTable);
 
-
     in.clear();
     in.seekg(0,ios::beg);
     bool done = false;
@@ -119,6 +107,9 @@ int compress(const string& txtName, const string& cmpName){
         out.write(buff,1);
     }
     delete[] codeTable;
+
+    cout << cmpName << " -> " << out.tellp() << " bytes" << endl;
+    if(size < out.tellp()) cout << "*** Size of compressed file > size of source file ***" << endl;
     out.close();
     in.close();
     //read file back
@@ -172,10 +163,6 @@ int decompress(const string& txtName, const string& cmpName){
     string* codeTable = new string[257];
     daTree.populateHuffCodeTable(codeTable);
 
-    for(unsigned short i = 0; i < n; i++){
-        cout << (unsigned)buffer[i] << ": " <<  freqs[i] << " " << codeTable[(unsigned short)buffer[i]] << endl;
-    }
-
     delete[] buffer;
     delete[] freqs;
     delete[] codeTable;
@@ -188,7 +175,6 @@ int decompress(const string& txtName, const string& cmpName){
         out.write(&c,sizeof(char));
         c = daTree.getChar(in,&done);
     }
-
     out.close();
 
     return 0;

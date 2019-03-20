@@ -18,12 +18,9 @@ frequencyCounter::frequencyCounter(std::ifstream& in) {
         return;
     }
     char c;
-    int numBytes = 0;
     while (in.get(c)) {
-        numBytes++;
         arr[(unsigned char) c]++; //saving all freqs
     }
-    std::cout << "the num bytes in file: " << numBytes << std::endl;
     //128 is our end of character bit, so we need an encoding for it as well
     arr[256] = 1;
 

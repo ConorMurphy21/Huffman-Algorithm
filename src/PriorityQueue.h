@@ -134,7 +134,6 @@ bool PriorityQueue<T>::dequeue() {
     if(isEmpty()){
         return false;
     }
-
     Node<T>* temp = head;
     head = temp->next;
     delete temp;
@@ -145,10 +144,6 @@ bool PriorityQueue<T>::dequeue() {
 //This is how we throw exceptions
 template<class T>
 T &PriorityQueue<T>::peek(){
-
-    //if(isEmpty())   //Checking if the queue is empty
-      //  return nullptr;
-
     return head->data;
 }
 
