@@ -1,6 +1,8 @@
 /*
  * Desc : Contains the main() of the application. Also contains the algorithms to compress and decompress
- * the required text file.
+ * the required file.
+ *
+ * made by - Conor Murphy and Maheeppartap Singh
  */
 
 // Header files
@@ -123,7 +125,7 @@ int decompress(const string& txtName, const string& cmpName){
 
     if(!in)return 1;
 
-    in.seekg(0, ios::end);
+    in.seekg(0, ios::end);  //read the file
     if (in.tellg() == 0) {
         ofstream of(txtName);
         return 0;
@@ -140,7 +142,7 @@ int decompress(const string& txtName, const string& cmpName){
     unsigned* freqs = new unsigned[num];
     in.read((char*)freqs,sizeof(unsigned)*num);
 
-    PriorityQueue<HuffmanTree> q;
+    PriorityQueue<HuffmanTree> q;   //create a new priority queue to store the characters in order
     for(int i = 0; i < num; i++){
         HuffmanTree huff(freqs[i],(unsigned short)buffer[i]);
         q.enqueue(huff);
@@ -161,8 +163,8 @@ int decompress(const string& txtName, const string& cmpName){
     }
 
     string* codeTable = new string[257];
-    daTree.populateHuffCodeTable(codeTable);
-
+    daTree.populateHuffCodeTable(codeTable);    //adding everything to the table to push to the file later in order
+//clearing the allocated space
     delete[] buffer;
     delete[] freqs;
     delete[] codeTable;
@@ -175,7 +177,7 @@ int decompress(const string& txtName, const string& cmpName){
         out.write(&c,sizeof(char));
         c = daTree.getChar(in,&done);
     }
-    out.close();
+    out.close(); //close the file and done!
 
     return 0;
 }
@@ -190,10 +192,9 @@ int main(int argc,char** argv){
     }
     //Case of compression
     if(strcmp("-c",argv[1]) == 0){
-            if(checkExtension(argv[3]))
+
         return compress(argv[2], argv[3]);
     }else if (strcmp("-d",argv[1]) == 0){
-        if(checkExtension(argv[2]))
         return decompress(argv[3], argv[2]);
     }else {
         cout << "argument 1 is not recognized" << endl;

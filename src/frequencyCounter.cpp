@@ -1,6 +1,8 @@
 
 /*
- * Description : Counts the occurence of all characters in the input file
+ * Description : Counts the occurence of all characters in the input file.
+ *
+ * made by - Conor Murphy and Maheeppartap Singh
  */
 
 

@@ -1,6 +1,8 @@
 
 /*
- * Description : implementation of the Huffman tree
+ * Description : implementation of the Huffman tree. Based on the algorithm described by Huffman.
+ *
+ * made by - Maheeppartap Singh and Conor Murphy
  */
 
 #pragma once

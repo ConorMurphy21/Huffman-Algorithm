@@ -1,6 +1,8 @@
 /*
  * Description : To read bits from a file
  *
+ * made by - Maheeppartap Singh and Conor Murphy.
+ *
  */
 #include "BitStream.h"
 
