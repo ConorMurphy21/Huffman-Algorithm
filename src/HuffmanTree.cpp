@@ -13,42 +13,46 @@
 
 //Start Node Methods
 
-// Node constructor with a value
+//pre:none
+//post: makes a new node
 HuffmanTree::Node::Node(unsigned short val) {
     this->val = val;
     this->left = nullptr;
     this->right = nullptr;
 }
 
-//Attaching two nodes given their addresses
+//pre: two nodes.
+//post: connects them
 void HuffmanTree::Node::attachNodes(HuffmanTree::Node* left, HuffmanTree::Node* right) {
     this->left = left;
     this->right = right;
 }
 
-//Returns the value of the node
+//pre: none
+//post: Returns the value of the node
 unsigned short HuffmanTree::Node::getVal() {
     return val;
 }
-
-//returns the address of the left node.
+//pre: none
+//post: returns the address of the left node.
 HuffmanTree::Node* HuffmanTree::Node::getLeft() {
     return left;
 }
-
-//returns the address of the right node
+//pre: none
+//post: returns the address of the right node
 HuffmanTree::Node* HuffmanTree::Node::getRight() {
     return right;
 }
 
-// Constructor with weight and character
+// post:Creates a new node with weight and character
 HuffmanTree::HuffmanTree(unsigned weight, unsigned short c) {
     root = new Node(c);
     this->weight = weight;
     this->height = 0;
 }
 
-// constructor with two trees and joining them together
+//pre: two huffman trees
+//post: joins the trees at appropriate points
 HuffmanTree::HuffmanTree(const HuffmanTree& a, const HuffmanTree& b) {
     this->weight = a.weight + b.weight;
     this->height = (a.height > b.height) ? a.height+1:b.height+1;
@@ -58,6 +62,7 @@ HuffmanTree::HuffmanTree(const HuffmanTree& a, const HuffmanTree& b) {
 //End Node Methods
 
 //start Tree methods
+
 //Default constructor
 HuffmanTree::HuffmanTree() {
     this->weight = 0;
@@ -65,13 +70,15 @@ HuffmanTree::HuffmanTree() {
     this->height = 0;
 }
 
-//Poppulate the code table recursively
+//pre: a valid code table with frequency
+//post: Populate the code table recursively
 void HuffmanTree::populateHuffCodeTable(std::string *table){
     char s[height];
     codeTab(root,s,0,table);
 }
 
-//Gets the next char from the tree to decode
+//pre: none
+//post: returns the next char from the tree to decode
 char HuffmanTree::getChar(std::ifstream& in, bool* done){
     static char c;
     static short n = 8;
@@ -99,10 +106,13 @@ char HuffmanTree::getChar(std::ifstream& in, bool* done){
 
 }
 
+//Destructor
 HuffmanTree::~HuffmanTree() {
     //deleteStuff(root);
 }
 
+//pre: none
+//post: deletes the tree recursively
 void HuffmanTree::deleteStuff(HuffmanTree::Node* root){
     if(root == nullptr)return;
     if(root->getLeft() != nullptr)deleteStuff(root->getLeft());
@@ -111,7 +121,8 @@ void HuffmanTree::deleteStuff(HuffmanTree::Node* root){
     delete root;
 }
 
-//Used to put the poppulate the tree
+//pre: none
+//post: recursively looks for an element in the tree
 void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::string* table) {
     if(root->getVal() != TNODEVAL){
         std::string code;

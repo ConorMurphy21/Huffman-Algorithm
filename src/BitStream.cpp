@@ -17,7 +17,8 @@ BitStream::~BitStream() {
 }
 
 
-//gets the
+//pre: the file should be open
+//post: returns the next char
 char* BitStream::getNext(std::ifstream& in, bool* done) {
     static bool onEof;
     unsigned char buff = 0; // buff al 0s.
@@ -55,4 +56,4 @@ char* BitStream::getNext(std::ifstream& in, bool* done) {
 }
 
 
-
+//End of Bitsream.cpp

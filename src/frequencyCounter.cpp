@@ -10,6 +10,8 @@
 #include "frequencyCounter.h"
 #include <iostream>
 
+//pre: a valid file which exists in the directory
+//post: counts and returns the frequency of all the chars in the file
 frequencyCounter::frequencyCounter(std::ifstream& in) {
 
     arr = new unsigned[257]{0};
@@ -27,18 +29,25 @@ frequencyCounter::frequencyCounter(std::ifstream& in) {
     arr[256] = 1;
 
 }
+
 //deconstructor
 frequencyCounter::~frequencyCounter(){
     delete[] arr;
 }
-//returns frequency of the input character
+
+//pre: none
+//post: returns the frequency of the character
 unsigned frequencyCounter::getFreqOfChar(unsigned short c) {
     return arr[c];
 }
 
+//pre: none
+//post: prints the table
 void frequencyCounter::print(){
     for(int i = 0; i < 257; i++){
         if(arr[i] == 0)continue;
         std::cout << i << ": " << arr[i] << std::endl;
     }
 }
+
+//end of file
