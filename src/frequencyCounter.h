@@ -16,11 +16,19 @@ public:
     //constructor
     explicit frequencyCounter(std::ifstream& in);
 
+    //deConstructor
     ~frequencyCounter();
 
-    // counts frequency of all characters in file
+
+    //pre: none
+    //post: none
+    //desc: returns the frequency of the character
     unsigned getFreqOfChar(unsigned short c);
 
+
+    //desc: prints the table
+    //pre: none
+    //post: none
     void print();
 
 };

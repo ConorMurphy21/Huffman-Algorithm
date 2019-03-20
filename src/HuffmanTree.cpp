@@ -70,15 +70,17 @@ HuffmanTree::HuffmanTree() {
     this->height = 0;
 }
 
-//pre: a valid code table with frequency
-//post: Populate the code table recursively
+//Desc: put huffman Encodings in a table where index represents the char it represents
+//pre: table must have at least 257 spots
+//post: understand how the table is represented
 void HuffmanTree::populateHuffCodeTable(std::string *table){
     char s[height];
     codeTab(root,s,0,table);
 }
 
-//pre: none
-//post: returns the next char from the tree to decode
+//Desc: returns next character from in stream
+//pre: file open at location of encoded section
+//post: remaining character is saved in static variable
 char HuffmanTree::getChar(std::ifstream& in, bool* done){
     static char c;
     static short n = 8;
@@ -106,23 +108,8 @@ char HuffmanTree::getChar(std::ifstream& in, bool* done){
 
 }
 
-//Destructor
-HuffmanTree::~HuffmanTree() {
-    //deleteStuff(root);
-}
-
 //pre: none
-//post: deletes the tree recursively
-void HuffmanTree::deleteStuff(HuffmanTree::Node* root){
-    if(root == nullptr)return;
-    if(root->getLeft() != nullptr)deleteStuff(root->getLeft());
-    if(root->getRight() != nullptr)deleteStuff(root->getLeft());
-
-    delete root;
-}
-
-//pre: none
-//post: recursively looks for an element in the tree
+//desc: recursively builds a table of huffman encodings
 void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::string* table) {
     if(root->getVal() != TNODEVAL){
         std::string code;

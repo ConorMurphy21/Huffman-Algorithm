@@ -17,8 +17,9 @@ BitStream::~BitStream() {
 }
 
 
+//desc: returns the next char of encoding
 //pre: the file should be open
-//post: returns the next char
+//post: carryOver will contain any bits that did not fit for next call
 char* BitStream::getNext(std::ifstream& in, bool* done) {
     static bool onEof;
     unsigned char buff = 0; // buff al 0s.

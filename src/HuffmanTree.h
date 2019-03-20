@@ -35,31 +35,31 @@ private:
 
     Node* root;
 
+    //pre: none
+    //desc: recursively builds a table of huffman encodings
     void codeTab(Node* root, char *s,unsigned n,std::string str[257]);
 
 public:
 
 
-    //Constructor with two tree. Function joins them.
+    //Desc: Constructor that joins 2 trees
     HuffmanTree(const HuffmanTree& a,const HuffmanTree& b);
 
-    //Constructor with weight and character
+    //Desc: Constructor with weight and character
     HuffmanTree(unsigned weight, unsigned short c);
 
     // Default constructor
     HuffmanTree();
 
-    ~HuffmanTree();
-
-    void deleteStuff(Node* root);
-
-    // Returns the next character from the tree to be put in order
+    //Desc: returns next character from in stream
+    //pre: file open at location of encoded section
+    //post: remaining character is saved in static variable
     char getChar(std::ifstream& in, bool* done);
 
-    // Adds values to the table to maintain for order
+    //Desc: put huffman Encodings in a table where index represents the char it represents
+    //pre: table must have at least 257 spots
+    //post: understand how the table is represented
     void populateHuffCodeTable(std::string *table);
-
-    void print();
 
     //Overloading few operators for convenience
     friend bool operator < (const HuffmanTree& a, const HuffmanTree& b);
