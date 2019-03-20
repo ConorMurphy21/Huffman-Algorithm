@@ -15,7 +15,6 @@
 #pragma once
 
 #include "Node.h"
-#include "EmptyDataCollectionException.h"
 
 template <class T>  // We can use T, ElementType or other names as a placeholder
 class PriorityQueue {
