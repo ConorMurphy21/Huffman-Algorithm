@@ -184,20 +184,31 @@ int decompress(const string& txtName, const string& cmpName){
 
 //Main starts here
 int main(int argc,char** argv){
-
 //Checking args
     if(argc != 4){
         cout << "Incorrect number of arguments" << endl;
         return 1;
     }
+
+    string txtFile,cmpFile;
+
     //Case of compression
     if(strcmp("-c",argv[1]) == 0){
-
-        return compress(argv[2], argv[3]);
+        txtFile = argv[2];
+        cmpFile = argv[3];
+        if(cmpFile.substr(cmpFile.length()-5) != ".huff") cmpFile.append(".huff");
+        return compress(txtFile, cmpFile);
     }else if (strcmp("-d",argv[1]) == 0){
-        return decompress(argv[3], argv[2]);
+        txtFile = argv[3];
+        cmpFile = argv[2];
+        if(cmpFile.substr(cmpFile.length()-5) != ".huff") {
+            cout << "File past in is not a huffman file, please pass in a file with the .huff file extension" << endl;
+            return 1;
+        }
+        return decompress(txtFile, cmpFile);
     }else {
-        cout << "argument 1 is not recognized" << endl;
+        cout << "Argument 1 is not recognized" << endl;
     }
+
 }
 //End of main
