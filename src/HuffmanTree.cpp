@@ -16,8 +16,8 @@
 // Node constructor with a value
 HuffmanTree::Node::Node(unsigned short val) {
     this->val = val;
-    this->left = NULL;
-    this->right = NULL;
+    this->left = nullptr;
+    this->right = nullptr;
 }
 
 //Attaching two nodes given their addresses
@@ -61,7 +61,7 @@ HuffmanTree::HuffmanTree(const HuffmanTree& a, const HuffmanTree& b) {
 //Default constructor
 HuffmanTree::HuffmanTree() {
     this->weight = 0;
-    this->root = NULL;
+    this->root = nullptr;
     this->height = 0;
 }
 
@@ -104,9 +104,9 @@ HuffmanTree::~HuffmanTree() {
 }
 
 void HuffmanTree::deleteStuff(HuffmanTree::Node* root){
-    if(root == NULL)return;
-    if(root->getLeft() != NULL)deleteStuff(root->getLeft());
-    if(root->getRight() != NULL)deleteStuff(root->getLeft());
+    if(root == nullptr)return;
+    if(root->getLeft() != nullptr)deleteStuff(root->getLeft());
+    if(root->getRight() != nullptr)deleteStuff(root->getLeft());
 
     delete root;
 }

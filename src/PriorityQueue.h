@@ -69,16 +69,16 @@ public:
 
 template<class T>
 PriorityQueue<T>::PriorityQueue() {
-    head = NULL;
+    head = nullptr;
     elementCount = 0;
 }
 
 template<class T>
 PriorityQueue<T>::PriorityQueue(const PriorityQueue &rhsPriorityQueue) {
     elementCount = rhsPriorityQueue.elementCount;
-    Node<T> n,k = NULL;
-    for(n = rhsPriorityQueue.peek(); n != NULL; n = n->next){
-            if(k != NULL)k.next = n;
+    Node<T> n,k = nullptr;
+    for(n = rhsPriorityQueue.peek(); n != nullptr; n = n->next){
+            if(k != nullptr)k.next = n;
             k = new Node<T>(n.data);
             enqueue(k);
     }
@@ -87,7 +87,7 @@ PriorityQueue<T>::PriorityQueue(const PriorityQueue &rhsPriorityQueue) {
 template<class T>
 PriorityQueue<T>::~PriorityQueue(){
     Node<T>* t = head;
-    while(t != NULL){
+    while(t != nullptr){
         Node<T>* temp = t->next;
         delete t;
         t = temp;
@@ -101,14 +101,14 @@ int PriorityQueue<T>::getElementCount() const {
 
 template<class T>
 bool PriorityQueue<T>::isEmpty() const {
-    return head == NULL;
+    return head == nullptr;
 }
 
 template<class T>
 bool PriorityQueue<T>::enqueue(const T& newElement) {
 
     if(isEmpty()){
-        head = new Node<T>(newElement, NULL);
+        head = new Node<T>(newElement, nullptr);
         elementCount++;      //you werent incrementing the elementcount in the special cases
         return true;
     }
@@ -120,7 +120,7 @@ bool PriorityQueue<T>::enqueue(const T& newElement) {
     }
     Node<T>* t = head;
         //get t to either the first element that is the same
-    while(t->next != NULL && t->next->data <= newElement)
+    while(t->next != nullptr && t->next->data <= newElement)
         t = t->next;
 
     Node<T>* node = new Node<T>(newElement,t->next);
