@@ -23,7 +23,7 @@ HuffmanTree::Node::Node(unsigned short val) {
 
 //pre: two nodes.
 //post: connects them
-void HuffmanTree::Node::attachNodes(HuffmanTree::Node* left, HuffmanTree::Node* right) {
+void HuffmanTree::Node::attachNodes(HuffmanTree::Node *left, HuffmanTree::Node *right) {
     this->left = left;
     this->right = right;
 }
@@ -33,14 +33,16 @@ void HuffmanTree::Node::attachNodes(HuffmanTree::Node* left, HuffmanTree::Node* 
 unsigned short HuffmanTree::Node::getVal() {
     return val;
 }
+
 //pre: none
 //post: returns the address of the left node.
-HuffmanTree::Node* HuffmanTree::Node::getLeft() {
+HuffmanTree::Node *HuffmanTree::Node::getLeft() {
     return left;
 }
+
 //pre: none
 //post: returns the address of the right node
-HuffmanTree::Node* HuffmanTree::Node::getRight() {
+HuffmanTree::Node *HuffmanTree::Node::getRight() {
     return right;
 }
 
@@ -53,11 +55,11 @@ HuffmanTree::HuffmanTree(unsigned weight, unsigned short c) {
 
 //pre: two huffman trees
 //post: joins the trees at appropriate points
-HuffmanTree::HuffmanTree(const HuffmanTree& a, const HuffmanTree& b) {
+HuffmanTree::HuffmanTree(const HuffmanTree &a, const HuffmanTree &b) {
     this->weight = a.weight + b.weight;
-    this->height = (a.height > b.height) ? a.height+1:b.height+1;
+    this->height = (a.height > b.height) ? a.height + 1 : b.height + 1;
     this->root = new Node(512);
-    this->root->attachNodes(a.root,b.root);
+    this->root->attachNodes(a.root, b.root);
 }
 //End Node Methods
 
@@ -73,25 +75,25 @@ HuffmanTree::HuffmanTree() {
 //Desc: put huffman Encodings in a table where index represents the char it represents
 //pre: table must have at least 257 spots
 //post: understand how the table is represented
-void HuffmanTree::populateHuffCodeTable(std::string *table){
+void HuffmanTree::populateHuffCodeTable(std::string *table) {
     char s[height];
-    codeTab(root,s,0,table);
+    codeTab(root, s, 0, table);
 }
 
 //Desc: returns next character from in stream
 //pre: file open at location of encoded section
 //post: remaining character is saved in static variable
-char HuffmanTree::getChar(std::ifstream& in, bool* done){
+char HuffmanTree::getChar(std::ifstream &in, bool *done) {
     static char c;
     static short n = 8;
-    HuffmanTree::Node* node = root;
-    for( ; ; ) {
-        if(node->getVal() != TNODEVAL){//check if node is not 0
-            if(node->getVal() == EOFVAL) *done = true;
-            return (char)node->getVal();
+    HuffmanTree::Node *node = root;
+    for (;;) {
+        if (node->getVal() != TNODEVAL) {//check if node is not 0
+            if (node->getVal() == EOFVAL) *done = true;
+            return (char) node->getVal();
         }
-        if(n >= 8){
-            if(!in.get(c)){
+        if (n >= 8) {
+            if (!in.get(c)) {
                 *done = true;
                 return 0;
             }
@@ -110,18 +112,18 @@ char HuffmanTree::getChar(std::ifstream& in, bool* done){
 
 //pre: none
 //desc: recursively builds a table of huffman encodings
-void HuffmanTree::codeTab(HuffmanTree::Node* root, char* s,unsigned n,std::string* table) {
-    if(root->getVal() != TNODEVAL){
+void HuffmanTree::codeTab(HuffmanTree::Node *root, char *s, unsigned n, std::string *table) {
+    if (root->getVal() != TNODEVAL) {
         std::string code;
         s[n] = 0;
         code = s;
         table[root->getVal()] = s;
         return;
     }
-    s[n]= '0';
-    codeTab(root->getLeft(),s,n+1,table);
+    s[n] = '0';
+    codeTab(root->getLeft(), s, n + 1, table);
     s[n] = '1';
-    codeTab(root->getRight(),s,n+1,table);
+    codeTab(root->getRight(), s, n + 1, table);
 }
 
 //Overloading < operator to compare the weights

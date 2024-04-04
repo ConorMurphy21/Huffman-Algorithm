@@ -16,13 +16,13 @@
 class BitStream {
 
 private:
-    std::string* codeTable;
-    char* buffer;
-    std::string carryOver;
+    std::string *codeTable;
+    char *buffer;
 public:
 
     //Constructor
-    explicit BitStream(std::string* codeTable);
+    explicit BitStream(std::string *codeTable);
+
     //DeConstructor
     ~BitStream();
 
@@ -30,7 +30,7 @@ public:
     //desc: returns the next char of encoding
     //pre: the file should be open
     //post: carryOver will contain any bits that did not fit for next call
-    char* getNext(std::ifstream& in, bool* done);
+    char *getNext(std::ifstream &in, bool *done);
 
 };
 

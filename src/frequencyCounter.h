@@ -9,12 +9,12 @@
 
 class frequencyCounter {
 private:
-     unsigned* arr;
+    unsigned *arr;
 
 public:
 
     //constructor
-    explicit frequencyCounter(std::ifstream& in);
+    explicit frequencyCounter(std::ifstream &in);
 
     //deConstructor
     ~frequencyCounter();

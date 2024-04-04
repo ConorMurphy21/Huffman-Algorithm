@@ -20,30 +20,33 @@ private:
     unsigned weight;
     unsigned height;
 
-    class Node{
+    class Node {
     private:
-        Node* left; //left subtree
-        Node* right; //right subtree
+        Node *left; //left subtree
+        Node *right; //right subtree
         unsigned short val;
     public:
         Node(unsigned short val); //constructor
-        void attachNodes(Node* a, Node* b);
+        void attachNodes(Node *a, Node *b);
+
         unsigned short getVal();
-        Node* getLeft();
-        Node* getRight();
+
+        Node *getLeft();
+
+        Node *getRight();
     };
 
-    Node* root;
+    Node *root;
 
     //pre: none
     //desc: recursively builds a table of huffman encodings
-    void codeTab(Node* root, char *s,unsigned n,std::string str[257]);
+    void codeTab(Node *root, char *s, unsigned n, std::string str[257]);
 
 public:
 
 
     //Desc: Constructor that joins 2 trees
-    HuffmanTree(const HuffmanTree& a,const HuffmanTree& b);
+    HuffmanTree(const HuffmanTree &a, const HuffmanTree &b);
 
     //Desc: Constructor with weight and character
     HuffmanTree(unsigned weight, unsigned short c);
@@ -54,7 +57,7 @@ public:
     //Desc: returns next character from in stream
     //pre: file open at location of encoded section
     //post: remaining character is saved in static variable
-    char getChar(std::ifstream& in, bool* done);
+    char getChar(std::ifstream &in, bool *done);
 
     //Desc: put huffman Encodings in a table where index represents the char it represents
     //pre: table must have at least 257 spots
@@ -62,8 +65,9 @@ public:
     void populateHuffCodeTable(std::string *table);
 
     //Overloading few operators for convenience
-    friend bool operator < (const HuffmanTree& a, const HuffmanTree& b);
-    friend bool operator <= (const HuffmanTree& a, const HuffmanTree& b);
+    friend bool operator<(const HuffmanTree &a, const HuffmanTree &b);
+
+    friend bool operator<=(const HuffmanTree &a, const HuffmanTree &b);
 
 };
 

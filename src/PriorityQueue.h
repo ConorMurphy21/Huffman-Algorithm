@@ -16,12 +16,12 @@
 
 #include "Node.h"
 
-template <class T>  // We can use T, ElementType or other names as a placeholder
+template<class T>  // We can use T, ElementType or other names as a placeholder
 class PriorityQueue {
 
 private:
 
-    Node<T>* head;      // Pointer to first node in the chain
+    Node<T> *head;      // Pointer to first node in the chain
     int elementCount;   // Current count of list items
 
 /* You can add private methods to this class */
@@ -32,7 +32,7 @@ public:
     PriorityQueue();
 
     // Copy Constructor
-    PriorityQueue(const PriorityQueue& rhsPriorityQueue);
+    PriorityQueue(const PriorityQueue &rhsPriorityQueue);
 
     // Destructor
     ~PriorityQueue();
@@ -50,7 +50,7 @@ public:
     // Precondition: This Priority Queue is sorted.
     // Post-condition: Once newElement is inserted, this Priority Queue remains sorted.
     // Time Efficiency: O(n)
-    bool enqueue(const T& newElement);
+    bool enqueue(const T &newElement);
 
     // Description: Removes the element with the "highest" priority.
     //              It returns "true" if successful, otherwise "false".
@@ -63,7 +63,7 @@ public:
     // Post-condition: This Priority Queue is unchanged.
     // Exceptions: Throws EmptyDataCollectionException if this Priority Queue is empty.
     // Time Efficiency: O(1)
-    T& peek();
+    T &peek();
 
 };
 
@@ -76,19 +76,19 @@ PriorityQueue<T>::PriorityQueue() {
 template<class T>
 PriorityQueue<T>::PriorityQueue(const PriorityQueue &rhsPriorityQueue) {
     elementCount = rhsPriorityQueue.elementCount;
-    Node<T> n,k = nullptr;
-    for(n = rhsPriorityQueue.peek(); n != nullptr; n = n->next){
-            if(k != nullptr)k.next = n;
-            k = new Node<T>(n.data);
-            enqueue(k);
+    Node<T> n, k = nullptr;
+    for (n = rhsPriorityQueue.peek(); n != nullptr; n = n->next) {
+        if (k != nullptr)k.next = n;
+        k = new Node<T>(n.data);
+        enqueue(k);
     }
 }
 
 template<class T>
-PriorityQueue<T>::~PriorityQueue(){
-    Node<T>* t = head;
-    while(t != nullptr){
-        Node<T>* temp = t->next;
+PriorityQueue<T>::~PriorityQueue() {
+    Node<T> *t = head;
+    while (t != nullptr) {
+        Node<T> *temp = t->next;
         delete t;
         t = temp;
     }
@@ -105,25 +105,25 @@ bool PriorityQueue<T>::isEmpty() const {
 }
 
 template<class T>
-bool PriorityQueue<T>::enqueue(const T& newElement) {
+bool PriorityQueue<T>::enqueue(const T &newElement) {
 
-    if(isEmpty()){
+    if (isEmpty()) {
         head = new Node<T>(newElement, nullptr);
         elementCount++;      //you werent incrementing the elementcount in the special cases
         return true;
     }
     //special case if smaller than the head
-    if(newElement < head->data){
-        head = new Node<T>(newElement,head);    //overload the > operator
+    if (newElement < head->data) {
+        head = new Node<T>(newElement, head);    //overload the > operator
         elementCount++;
         return true;
     }
-    Node<T>* t = head;
-        //get t to either the first element that is the same
-    while(t->next != nullptr && t->next->data <= newElement)
+    Node<T> *t = head;
+    //get t to either the first element that is the same
+    while (t->next != nullptr && t->next->data <= newElement)
         t = t->next;
 
-    Node<T>* node = new Node<T>(newElement,t->next);
+    Node<T> *node = new Node<T>(newElement, t->next);
     t->next = node;
     elementCount++;
     return true;
@@ -131,10 +131,10 @@ bool PriorityQueue<T>::enqueue(const T& newElement) {
 
 template<class T>
 bool PriorityQueue<T>::dequeue() {
-    if(isEmpty()){
+    if (isEmpty()) {
         return false;
     }
-    Node<T>* temp = head;
+    Node<T> *temp = head;
     head = temp->next;
     delete temp;
     elementCount--;
@@ -143,7 +143,7 @@ bool PriorityQueue<T>::dequeue() {
 
 //This is how we throw exceptions
 template<class T>
-T &PriorityQueue<T>::peek(){
+T &PriorityQueue<T>::peek() {
     return head->data;
 }
 
