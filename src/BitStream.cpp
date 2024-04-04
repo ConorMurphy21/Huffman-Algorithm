@@ -26,6 +26,7 @@ char *BitStream::getNext(std::ifstream &in, bool *done /* OUT VARIABLE */) {
     // write code to fill buff (an 8 bit character) with as many character codes as can fit
     // if only part of a code can fit, make sure you store information (as a member variable)
     // so that you can finish writing the code
+    //                                                                       a: 0101 b:22222222 aba
     // i.e. (imagine 22222222 was a code (even tho there are only 1 and 0)) |01012222|22220101|
     // you must be able to write this out in 2 parts, getNext returns |01012222| first and then the next
     // getNext call returns |22220101|
