@@ -18,7 +18,7 @@ BitStream::~BitStream() {
 }
 
 
-char *BitStream::getNext(std::ifstream &in, bool *done) {
+char *BitStream::getNext(std::ifstream &in, bool *done /* OUT VARIABLE */) {
     // this is always false, except if we start writing the eof character
     // see line 38
     static bool onEof = false;
@@ -30,6 +30,7 @@ char *BitStream::getNext(std::ifstream &in, bool *done) {
     // you must be able to write this out in 2 parts, getNext returns |01012222| first and then the next
     // getNext call returns |22220101|
     // if the eof code stops somewhere in the middle of a char, pad the rest of the char with 0's
+    // set *done to be true if eof is finished being written
 
     // This snippet of code will get you the sequentially next code to encode
     // a code string, e.g. '0100' or '10' or '01101001000111'
